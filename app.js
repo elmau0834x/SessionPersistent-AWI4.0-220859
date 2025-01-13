@@ -46,14 +46,14 @@ app.get('/estado-sesion', (req, res) =>{
         const segundos = Math.floor((antiguedadMs % (1000 * 60)) / 1000)
 
         //Convertimos la decha al uso horario de CDMX
-        const inicioCDMX = moment(inicio).tz('America/Mexico_City').format
-        const ultimoCDMX = moment(ultimoAcceso).tz('America/Mexico_City').format
+        const inicioCDMX = moment(inicio).tz('America/Mexico_City').format('YYYY-MM-DDTHH:mm:ssZ');
+        const ultimoCDMX = moment(ultimoAcceso).tz('America/Mexico_City').format('YYYY-MM-DDTHH:mm:ssZ');        
 
         res.json({
             mensaje: 'Estado de la sesion',
             sessionID: req.sessionID,
-            inicio: inicioCDMX.toISOString(),
-            ultimoAcceso: ultimoCDMX.toISOString(),
+            inicio: inicioCDMX,
+            ultimoAcceso: ultimoCDMX,
             antiguedad: `${horas} horas, ${minutos} minutos, ${segundos} segundos`
         })
     }else{
@@ -65,7 +65,7 @@ app.get('/cerrar-sesion', (req, res) =>{
     if (req.session){
         req.session.destroy((err)=>{
             if (err) {
-                return res.status(500).send('https://http.cat/500')
+                return res.status(500).send('Internal Server Error')
             }
             res.send('Sesion cerrada correctamente')
         })
